@@ -1,6 +1,12 @@
 <?php
 
+use App\Http\Controllers\CustomerController as ControllersCustomerController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CustomerController;
+use Illuminate\Http\Request;
+use App\Models\Customers;
+use App\Models\Locations;
+use App\Models\Firms;
 
 /*
 |--------------------------------------------------------------------------
@@ -8,62 +14,40 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
 |
 */
 
+Route::get('/', [CustomerController::class, 'getStarted'])->name('customer.signup');
+Route::post('/signup', [CustomerController::class, 'signUp']);
+//Route::get('/welcome', [CustomerController::class, 'index']);
+Route::post('/proceed1/{customer_id}', [CustomerController::class, 'proceed1']);
+//Route::get('/banking', [CustomerController::class, 'aboutbus']);
+Route::post('/proceed2/{customer_id}', [CustomerController::class, 'proceed2']);
+//Route::get('/laststep', [CustomerController::class, 'laststep']);
+Route::post('/finalstep/{customer_id}', [CustomerController::class, 'finalstep']);
 
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\SessionsController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProductController;
+Route::get('/login', [CustomerController::class, 'logIn']);
 
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+//Route::get('get-all-session', function(){
+//   $session = session()->all();
+//       echo"<pre>";
+//       print_r($session);   
+//       echo"</pre>";
 
-Route::get('/', function () {return redirect('sign-in');})->middleware('guest');
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
-Route::get('sign-up', [RegisterController::class, 'create'])->middleware('guest')->name('register');
-Route::post('sign-up', [RegisterController::class, 'store'])->middleware('guest');
-Route::get('sign-in', [SessionsController::class, 'create'])->middleware('guest')->name('login');
-Route::post('sign-in', [SessionsController::class, 'store'])->middleware('guest');
-Route::post('verify', [SessionsController::class, 'show'])->middleware('guest');
-Route::post('reset-password', [SessionsController::class, 'update'])->middleware('guest')->name('password.update');
-Route::get('verify', function () {
-	return view('sessions.password.verify');
-})->middleware('guest')->name('verify');
-Route::get('/reset-password/{token}', function ($token) {
-	return view('sessions.password.reset', ['token' => $token]);
-})->middleware('guest')->name('password.reset');
+//});
 
-Route::group(['middleware' => 'auth'], function () {
-	Route::get('billing', function () {
-		return view('pages.billing');
-	})->name('billing');
-	Route::get('tables', function () {
-		return view('pages.tables');
-	})->name('tables');
-	Route::get('notifications', function () {
-		return view('pages.notifications');
-	})->name('notifications');
-	Route::post('sign-out', [SessionsController::class, 'destroy'])->name('logout');
+//Route::get('set-session', function(request $request){
+// $request->session()->put('','');
+// $request->session()->put('');
+// return redirect('get-all-session');
+//});
 
-	Route::get('profile', [ProfileController::class, 'create'])->name('profile');
-	Route::resource('user-management', UserController::class)
-		->missing(function (Request $request) {
-			return Redirect::route('user-management.index');
-		});
-	Route::resource('product', ProductController::class)
-		->missing(function (Request $request) {
-			return Redirect::route('product.index');
-		});
-	Route::post('user-profile', [ProfileController::class, 'update']);
-	Route::get('user-profile', function () {
-		return view('pages.users.user-profile');
-	})->name('user-profile');
+Route::get('/customer', function(){
+    $customers = Customers::all();
+    echo "<pre>";
+    print_r($customers->toArray());
 });
+
