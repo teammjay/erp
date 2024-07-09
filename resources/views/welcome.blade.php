@@ -13,5 +13,7 @@
             <h1 class="text-light text-center">Welcome to Material Dashboard FREE Laravel Live Preview.</h1>
         </div>
     </div>
-        <x-footers.guest></x-footers.guest>
+        <x-footers.guest>
+            
+        </x-footers.guest>
 </x-layout>
