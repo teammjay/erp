@@ -16,7 +16,7 @@ class ProductController extends Controller
     public function index(){
 
         $products = Product::latest()->paginate(10);
-        return view('admin.products.list',compact('products'));
+        return view('pages.products.index',compact('products'));
 
     }
     public function create(){
@@ -28,7 +28,7 @@ class ProductController extends Controller
         $subCategories = SubCategory::orderBy('name','ASC')->get();
         $brands = Brand::orderBy('name','ASC')->get();
         $data=compact( 'categories', 'subCategories','brands','title','button','create');
-        return view('admin.products.create',compact('url'))->with($data);
+        return view('pages.products.form',compact('url'))->with($data);
     }
 
     public function store(Request $request){
@@ -80,7 +80,7 @@ class ProductController extends Controller
                if ($product->save()) {
         // Category created successfully
         // $request->session()->put('success', 'Category created successfully!');
-        return Redirect()->route('products.create')->with('success', 'Product created successfully!');
+        return Redirect()->route('products.create')->with('status', 'Product created successfully!');
     } else {
         // Redirect back to the previous page
         return Redirect::back()->with('error', 'Failed to create product');
@@ -102,7 +102,7 @@ public function edit($productId, Request $request){
         $button="Save";
         $url=url('/products/edit');
         $data = compact('product','url','title','button','create','productId','categories', 'subCategories','brands');
-       return view('admin.products.create') -> with ($data);
+       return view('pages.products.form') -> with ($data);
        }
 
 }
@@ -142,4 +142,13 @@ public function destroy($id){
         return redirect('/products/list'); 
 
 }
+    public function getSubcategories($id)
+    {
+        $category = Category::with(['subcategories', 'brands'])->find($id);
+
+        return response()->json([
+            'subcategories' => $category->subcategories,
+            'brands' => $category->brands,
+        ]);
+    }
 }

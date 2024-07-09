@@ -35,13 +35,38 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white {{ $activePage == 'product' ? ' active bg-gradient-primary' : '' }} "
-                    href="{{ route('product.index') }}">
+                    href="{{ route('products.index') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">inventory_2</i>
                     </div>
                     <span class="nav-link-text ms-1">Products</span>
                 </a>
             </li>
+            <li class="nav-item">
+    <a class="nav-link text-white {{ $activePage == 'brands' ? 'active bg-gradient-primary' : '' }}" href="{{ route('brands.index') }}">
+        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">store</i>
+        </div>
+        <span class="nav-link-text ms-1">Brands</span>
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link text-white {{ $activePage == 'sub_categories' ? 'active bg-gradient-primary' : '' }}" href="{{ route('subcategories.index') }}">
+        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">category</i>
+        </div>
+        <span class="nav-link-text ms-1">SubCategory</span>
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link text-white {{ $activePage == 'categories' ? 'active bg-gradient-primary' : '' }}" href="{{ route('categories.index') }}">
+        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">category</i>
+        </div>
+        <span class="nav-link-text ms-1">Category</span>
+    </a>
+</li>
+
             {{-- <li class="nav-item">
                 <a class="nav-link text-white {{ $activePage == 'tables' ? ' active bg-gradient-primary' : '' }} "
                     href="{{ route('tables') }}">
