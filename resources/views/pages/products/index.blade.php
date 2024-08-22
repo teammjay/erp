@@ -1,4 +1,4 @@
-<x-layout bodyClass="g-sidenav-show  bg-gray-200">
+<x-layout bodyClass="g-sidenav-show bg-gray-200">
     <x-navbars.sidebar activePage="product"></x-navbars.sidebar>
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <!-- Navbar -->
@@ -25,77 +25,142 @@
                             </button>
                         </div>
                     @endif
-                    <div class="card my-4">
-                        <div class=" me-3 my-3 text-end">
-                            <a class="btn bg-gradient-dark mb-0" href="{{ route('product.create') }}">
-                                <i class="material-icons text-sm">add</i>&nbsp;&nbsp;Add New Product
-                            </a>
-                        </div>
-                        <div class="card-body px-0 pb-2">
-                            <div class="table-responsive p-0">
-                                <table class="table align-items-center mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th
-                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                ID
-                                            </th>
-                                            <th
-                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                NAME</th>
-                                            <th
-                                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                SKU</th>
-                                            <th class="text-secondary opacity-7"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    @forelse ($products as $product)
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <p class="mb-0 text-sm">{{ $product->id }}</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm">{{ $product->name }}</h6>
+                    <div class="flex items-start justify-start mb-3">
+                        <input type="text" id="searchInput" placeholder="Search..."
+                            class="px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div class="text-end mb-3">
+                <a href="{{ route('products.create') }}" class="btn btn-dark">
+                    <i class="material-icons text-sm">add</i>&nbsp;&nbsp;Add New Product
+                </a>
+            </div>
+                    <div class="my-8">
+                        <h1 class="font-semibold text-center mt-5 text-2xl">Products</h1>
+                    </div>
 
-                                                </div>
-                                            </td>
-                                            <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">{{ $product->sku }}</span>
-                                            </td>
-                                            <td class="align-middle">
-                                                <a rel="tooltip" class="btn btn-success btn-link" href="{{ route('product.edit', ['product' => $product->id]) }}" data-original-title="" title="">
-                                                    <i class="material-icons">edit</i>
-                                                    <div class="ripple-container"></div>
-                                                </a>
-                                                <a rel="tooltip" class="btn btn-danger btn-link" href="{{ route('product.destroy', ['product' => $product->id]) }}" data-original-title="" title="">
-                                                    <i class="material-icons">close</i>
-                                                    <div class="ripple-container"></div>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @empty
+                    <div class="overflow-x-auto mt-3">
+                        <table class="table table-hover table-striped min-w-full divide-y divide-gray-200" id="dataTable">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Id</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Name</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Slug</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Description</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Status</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Image</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @if ($products->isNotEmpty())
+                                    @foreach ($products as $product)
                                         <tr>
-                                            <td colspan="6" class="text-center">
-                                                No Record Found
+                                            <td>{{ $product->id }}</td>
+                                            <td>{{ $product->name }}</td>
+                                            <td>{{ $product->slug }}</td>
+                                            <td>{{ $product->description }}</td>
+                                            <td>
+                                                @if ($product->status == 'active')
+                                                    <span class="badge bg-success">Active</span>
+                                                @else
+                                                    <span class="badge bg-danger">Inactive</span>
+                                                @endif
+                                            </td>
+                                            <td><img src="{{ asset('storage/images/products/' . $product->image) }}" width="100px"></td>
+                                            <td>
+                                                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                                                <a href="{{ route('products.delete', $product->id) }}" class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Are you sure?')">Delete</a>
                                             </td>
                                         </tr>
-                                    @endforelse
-                                    </tbody>
-                                </table>
-                            </div>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="7" class="text-center py-4">No products found.</td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                        <div class="my-4">
+                            {{ $products->links() }}
                         </div>
                     </div>
+                    <script>
+                        // Get the input element
+                        let searchInput = document.getElementById('searchInput');
+
+                        // Add event listener
+                        searchInput.addEventListener('keyup', function () {
+                            // Get the filter value
+                            let filterValue = searchInput.value.toUpperCase();
+
+                            // Get the table rows
+                            let rows = document.querySelectorAll('#dataTable tbody tr');
+
+                            // Loop through all table rows, and hide those that don't match the search query
+                            rows.forEach(function (row) {
+                                let name = row.querySelector('td:nth-child(2)').textContent.toUpperCase();
+                                let slug = row.querySelector('td:nth-child(3)').textContent.toUpperCase();
+                                if (name.includes(filterValue) || slug.includes(filterValue)) {
+                                    row.style.display = '';
+                                } else {
+                                    row.style.display = 'none';
+                                }
+                            });
+                        });
+                    </script>
                 </div>
             </div>
-            <x-footers.auth></x-footers.auth>
         </div>
-    </main>
-    <x-plugins></x-plugins>
 
+        <!-- Bootstrap JS and dependencies -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Additional Plugins and Scripts -->
+        <x-plugins></x-plugins>
+        @push('js')
+            <script src="{{ asset('assets') }}/js/dropzone.min.js"></script>
+            <script src="{{ asset('assets') }}/js/quill.min.js"></script>
+            <script>
+                var quill = new Quill('#editor', {
+                    theme: 'snow' // Specify theme in configuration
+                });
+            </script>
+
+            <!-- Filter Products -->
+            <script>
+                // Filter products based on search input
+                document.getElementById('searchInput').addEventListener('keyup', function () {
+                    let filterValue = this.value.toUpperCase();
+                    let rows = document.querySelectorAll('#dataTable tbody tr');
+
+                    rows.forEach(function (row) {
+                        let name = row.querySelector('td:nth-child(2)').textContent.toUpperCase();
+                        let slug = row.querySelector('td:nth-child(3)').textContent.toUpperCase();
+
+                        if (name.includes(filterValue) || slug.includes(filterValue)) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                });
+            </script>
+        @endpush
+    </main>
 </x-layout>
