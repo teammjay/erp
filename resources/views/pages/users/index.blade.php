@@ -57,36 +57,36 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    @forelse ($users as $user)
+                                    @forelse ($customers as $customer)
                                         <tr>
                                             <td>
                                                 <div class="d-flex px-2 py-1">
                                                     <div class="d-flex flex-column justify-content-center">
-                                                        <p class="mb-0 text-sm">{{ $user->id }}</p>
+                                                        <p class="mb-0 text-sm">{{ $customer->id }}</p>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="d-flex flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm">{{ $user->name }}</h6>
+                                                    <h6 class="mb-0 text-sm">{{ $customer->name }}</h6>
 
                                                 </div>
                                             </td>
                                             <td class="align-middle text-center text-sm">
-                                                <p class="text-xs text-secondary mb-0">{{ $user->email }}</p>
+                                                <p class="text-xs text-secondary mb-0">{{ $customer->email }}</p>
                                             </td>
                                             <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">{{ $user->phone }}</span>
+                                                <span class="text-secondary text-xs font-weight-bold">{{ $customer->phone }}</span>
                                             </td>
                                             <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">{{ $user->store_name }}</span>
+                                                <span class="text-secondary text-xs font-weight-bold">{{ $customer->store_name }}</span>
                                             </td>
                                             <td class="align-middle">
-                                                <a rel="tooltip" class="btn btn-success btn-link" href="{{ route('user-management.edit', ['user_management' => $user->id]) }}" data-original-title="" title="">
+                                                <a rel="tooltip" class="btn btn-success btn-link" href="{{ route('user-management.edit', ['user_management' => $customer->id]) }}" data-original-title="" title="">
                                                     <i class="material-icons">edit</i>
                                                     <div class="ripple-container"></div>
                                                 </a>
-                                                <a rel="tooltip" class="btn btn-danger btn-link" href="{{ route('user-management.destroy', ['user_management' => $user->id]) }}" data-original-title="" title="">
+                                                <a rel="tooltip" class="btn btn-danger btn-link" href="{{ route('user-management.destroy', ['user_management' => $customer->id]) }}" data-original-title="" title="">
                                                     <i class="material-icons">close</i>
                                                     <div class="ripple-container"></div>
                                                 </a>

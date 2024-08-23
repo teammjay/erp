@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User;
+use App\Models\Customers;
 
 
 class DatabaseSeeder extends Seeder
@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         User::factory()->create([
+         Customers::factory()->create([
             'name' => 'SuperAdmin',
             'email' => 'admin@teammjay.com',
             'password' => ('P@ssw0rd99999'),

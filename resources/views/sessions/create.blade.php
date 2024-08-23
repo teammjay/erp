@@ -43,7 +43,7 @@
                                         @enderror
                                         <div class="input-group input-group-outline mt-3">
                                             <label class="form-label">Password</label>
-                                            <input type="password" class="form-control" name="password" value='{{ 'secret'}}'>
+                                            <input type="password" class="form-control" name="password" value='{{ 'secret' }}'>
                                         </div>
                                         @error('password')
                                         <p class='text-danger inputerror'>{{ $message }} </p>
@@ -59,7 +59,7 @@
                                         </div>
                                         <p class="mt-4 text-sm text-center">
                                             Don't have an account?
-                                            <a href="{{ route('register') }}"
+                                            <a href="{{ route('customer.signup') }}"
                                                 class="text-primary text-gradient font-weight-bold">Sign up</a>
                                         </p>
                                         <p class="text-sm text-center">
