@@ -23,93 +23,162 @@
                     </button>
                 </div>
             @endif
-            <form id="product-form" method='POST' action='/product/{{ $product ? $product->id : ''  }}' enctype="multipart/form-data">
-                @csrf
-                @if($product)
-                    @method('PUT')
-                @endif
-                <div class="card card-body">
-                    <div class="card card-plain h-100">
-                        <div class="card-header pb-0 p-3">
-                            <div class="row">
-                                <div class="col-md-8 d-flex align-items-center">
-                                    <h6 class="mb-2">Basic Information</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body p-3">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Name</label>
-                                        <input type="text" name="name" class="form-control border border-2 p-2" value='{{ old('name', $product ? $product->name : '') }}'>
-                                        @error('name')
-                                            <p class='text-danger inputerror'>{{ $message }} </p>
-                                        @enderror
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Default Price</label>
-                                        <input type="text" name="name" class="form-control border border-2 p-2" value='{{ old('price', $product ? $product->price : '') }}'>
-                                        @error('price')
-                                            <p class='text-danger inputerror'>{{ $message }} </p>
-                                        @enderror
-                                    </div>
-                                </div>
 
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">SKU</label>
-                                        <input type="text" name="sku" class="form-control border border-2 p-2" value='{{ old('sku', $product ? $product->sku : '') }}'>
-                                        @error('sku')
-                                            <p class='text-danger inputerror'>{{ $message }} </p>
-                                        @enderror
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Inventory</label>
-                                        <input type="text" name="quantity" class="form-control border border-2 p-2" value='{{ old('quantity', $product ? $product->quantity : '') }}'>
-                                        @error('quantity')
-                                            <p class='text-danger inputerror'>{{ $message }} </p>
-                                        @enderror
-                                    </div>
-                                </div>
+            <div class="d-flex justify-content-end my-4">
+                <a href="{{ route('products.index') }}" class="btn btn-primary">Back</a>
+            </div>
+            <div class="card mx-auto shadow-sm border border-gray-300 p-4" style="max-width: 600px;">
+                <h1 class="card-title h4 mb-4">{{$title}}</h1>
+                <form action="{{ $create ? route('products.store') : route('products.update',['product'=>$productId])}}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <!-- Product Name and Description -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label ">Name</label>
+                        <input type="text" id="name" name="name" value="{{isset($product['name']) ?  $product['name'] : ''}}" class="form-control border border-black" placeholder="Product Name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="slug" class="form-label">Slug</label>
+                        <input type="text" id="slug" name="slug" value="{{isset($product['slug']) ?  $product['slug'] : ''}}" class="form-control border border-black" placeholder="Product Slug">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea id="description" name="description" rows="4" class="form-control border border-black">{{isset($product['description']) ?  $product['description'] : ''}}</textarea>
+                    </div>
+
+                    <!-- Product Category and Subcategory -->
+                    <div class="mb-3">
+                        <h2 class="h5 mb-3">Product Category</h2>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="category" class="form-label ">Category</label>
+                                <select name="category" id="category" class="form-select">
+                                    <option value="active">Select Category</option>
+                                    @if($categories->isNotEmpty())
+                                    @foreach ($categories as $category)
+                                        <option value="{{$category->id}}">{{$category->name}}</option>
+                                    @endforeach
+                                    @endif
+                                </select>
                             </div>
-                        </div>
-                        <div class="card-header pt-0 pb-0 p-3">
-                            <div class="row">
-                                <div class="col-md-8 d-flex align-items-center">
-                                    <h6 class="mb-2">Desciption</h6>
-                                </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="subcategory" class="form-label">Subcategory</label>
+                                <select name="subcategory" id="subcategory" class="form-select">
+                                    <option value="active">Select Subcategory</option>
+                                    @if($subCategories->isNotEmpty())
+                                    @foreach ($subCategories as $subcategory)
+                                        <option value="{{$subcategory->id}}">{{$subcategory->name}}</option>
+                                    @endforeach
+                                    @endif
+                                </select>
                             </div>
-                        </div>
-                        <div class="card-body p-3">
-                            <div id="editor"></div>
-                        </div>
-                        <div class="card-header pt-0 pb-0 p-3">
-                            <div class="row">
-                                <div class="col-md-8 d-flex align-items-center">
-                                    <h6 class="mb-2">Images</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body p-3">
-                            <div action="/file-upload" class="border dropzone" id="dropzone">
-                                <div class="fallback">
-                                    <input name="file" type="file" multiple />
-                                </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="brand" class="form-label">Brand</label>
+                                <select name="brand" id="brand" class="form-select">
+                                    <option value="active">Select Brand</option>
+                                    @if($brands->isNotEmpty())
+                                    @foreach ($brands as $brand)
+                                        <option value="{{$brand->id}}">{{$brand->name}}</option>
+                                    @endforeach
+                                    @endif
+                                </select>
                             </div>
                         </div>
                     </div>
-                    <div class="card card-plain h-100">
-                        <div class="card-body p-3">
-                            <button type="submit" class="btn bg-gradient-dark">Submit</button>
-                            <a href='{{ route("product.index") }}' class="btn bg-gradient-dark ms-3">Back</a>
+
+                    <div class="mb-3">
+                        <h2 class="form-label h5 mb-3">Upload Images (Max:20 images only)</h2>
+                        <input type="file" name="image" id="image" class="form-control border border-black" multiple>
+                        @if(isset($product['image']))
+                        <img src="{{ asset('storage/images/product/'.$product['image']) }}" alt="Previous Image" class="mt-2">
+                        @endif
+                    </div>
+
+                    <!-- Pricing: Price and Compare at Price -->
+                    <div class="mb-3">
+                        <h2 class="h5 mb-3">Pricing</h2>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="price" class="form-label">Price</label>
+                                <input type="text" id="price" name="price" value="{{isset($product['price']) ?  $product['price'] : ''}}" class="form-control border border-black">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="compare_price" class="form-label">Compare at Price</label>
+                                <input type="text" id="compare_price" name="compare_price" value="{{isset($product['compare_price']) ?  $product['compare_price'] : ''}}" class="form-control border border-black">
+                            </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                    <div class="mb-3">
+                        <label for="vendor" class="form-label">Your Vendor Name</label>
+                        <input type="text" id="vendor" name="vendor" value="{{isset($product['vendor']) ?  $product['vendor'] : ''}}" class="form-control border border-black" placeholder="Product vendor">
+                    </div>
+                    <div class="mb-3">
+                        <label for="product_type" class="form-label">Product type</label>
+                        <input type="text" id="product_type" name="product_type" value="{{isset($product['product_type']) ?  $product['product_type'] : ''}}" class="form-control border border-black" placeholder="product_type">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="tags" class="form-label">Tags</label>
+                        <input type="text" id="tags" name="tags" value="{{isset($product['tags']) ?  $product['tags'] : ''}}" class="form-control border border-black" placeholder="tags">
+                    </div>
+                    <div class="mb-3">
+                        <label for="inventory_management" class="form-label">Inventory Management</label>
+                        <input type="text" id="inventory_management" name="inventory_management" value="shopify" class="form-control border border-black" readonly>
+                    </div>
+                    <!-- Inventory: SKU, Barcode, Track Quantity, Quantity -->
+                    <div class="mb-3">
+                        <h2 class="h5 mb-3">Inventory</h2>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="sku" class="form-label">SKU (Stock Keeping Unit)</label>
+                                <input type="text" id="sku" name="sku" value="{{isset($product['sku']) ?  $product['sku'] : ''}}" class="form-control border border-black">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="barcode" class="form-label">Barcode</label>
+                                <input type="text" id="barcode" name="barcode" value="{{isset($product['barcode']) ?  $product['barcode'] : ''}}" class="form-control border border-black">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Track Quantity</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="track_qty_yes" name="track_qty" value="Yes">
+                                <label class="form-check-label" for="track_qty_yes">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="track_qty_no" name="track_qty" value="No">
+                                <label class="form-check-label" for="track_qty_no">No</label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select name="status" id="status" class="form-select">
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="qty" class="form-label">Quantity</label>
+                            <input type="number" id="qty" name="qty" min="0" class="form-control border border-black" value="{{ old('qty') }}">
+                        </div>
+                    </div>
 
+                    <!-- Featured Product -->
+                    <div class="mb-3">
+                        <label for="featured_product" class="form-label">Featured Product</label>
+                        <select name="featured_product" id="featured_product" class="form-select">
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary w-100">{{$button}}</button>
+                    
+                    </div>
+                </form>
+            </div>
         </div>
-        <x-footers.auth></x-footers.auth>
     </div>
     <x-plugins></x-plugins>
     @push('js')
@@ -121,4 +190,40 @@
         });
     </script>
     @endpush
+    <script>
+categorySelect.addEventListener('change', function () {
+    const categoryId = this.value;
+
+    // Clear existing options
+    subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+    brandSelect.innerHTML = '<option value="">Select Brand</option>';
+
+    if (categoryId) {
+        fetch(`/categories/${categoryId}/subcategories`)
+            .then(response => response.json())
+            .then(data => {
+                data.subcategories.forEach(subcategory => {
+                    const option = document.createElement('option');
+                    option.value = subcategory.id;
+                    option.textContent = subcategory.name;
+                    subcategorySelect.appendChild(option);
+                });
+
+                // You need to send a separate request to fetch brands
+                fetch(`/categories/${categoryId}/brands`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.brands.forEach(brand => {
+                            const option = document.createElement('option');
+                            option.value = brand.id;
+                            option.textContent = brand.name;
+                            brandSelect.appendChild(option);
+                        });
+                    });
+            })
+            .catch(error => console.error('Fetch error:', error));
+    }
+});
+</script>
+
 </x-layout>
