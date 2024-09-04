@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id('customer_id');
             $table->string('name', 60);
             $table->string('email', 100);
+            $table->string('phone')->nullable();
             $table->string('password');
-            
             $table->timestamps();
         });
     }

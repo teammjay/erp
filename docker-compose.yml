@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+    db:
+        image: mysql:8.0
+        container_name: laravel-db
+        ports:
+            - "3307:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: admin@123
+            MYSQL_DATABASE: laravel_erp
+        volumes:
+            - dbdata:/var/lib/mysql
+
+volumes:
+    dbdata:
+        driver: local

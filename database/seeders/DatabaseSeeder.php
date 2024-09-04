@@ -15,11 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         Customers::factory()->create([
-            'name' => 'SuperAdmin',
-            'email' => 'admin@teammjay.com',
-            'password' => ('P@ssw0rd99999'),
-            'is_admin' => 1
-        ]);
+         // import the customer seeder
+            $this->call(CreateUserDataSeeder::class);
     }
 }

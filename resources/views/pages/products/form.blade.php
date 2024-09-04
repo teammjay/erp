@@ -24,65 +24,101 @@
                 </div>
             @endif
 
-            <div class="d-flex justify-content-end my-4">
-                <a href="{{ route('products.index') }}" class="btn btn-primary">Back</a>
-            </div>
-            <div class="card mx-auto shadow-sm border border-gray-300 p-4" style="max-width: 600px;">
+{{--            <div class="d-flex justify-content-end my-4">--}}
+{{--                <a href="{{ route('products.index') }}" class="btn btn-primary">Back</a>--}}
+{{--            </div>--}}
+                <div>
+                    <form>
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="input-group input-group-outline my-3">
+                                    <label for="name" class="form-label">Name</label>
+                                    <input type="text" id="name" name="name" class="form-control" value="{{isset($product['name']) ?  $product['name'] : ''}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="">
+                                <div class="input-group input-group-outline my-3">
+                                    <label class="form-label">Description</label>
+                                    <textarea id="description" name="description" rows="4"  class="form-control"
+                                              data-placeholder="Enter Product Description Here"
+                                              spellcheck="false" onfocus="onElementFocus(this)" onfocusout="onElementDeFocused(this)" >
+                                        {{isset($product['description']) ?  $product['description'] : ''}}
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <h2 class="h5 mb-3">Product Category</h2>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="input-group input-group-static my-3">
+                                    <label for="category">Category</label>
+                                    <select class="form-control" name="category" id="category">
+                                        <option value="active">Select Category</option>
+                                        @if($categories->isNotEmpty())
+                                            @foreach ($categories as $category)
+                                                <option value="{{$category->id}}">{{$category->name}}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group input-group-static my-3">
+                                    <label for="subcategory">Subcategory</label>
+                                    <select class="form-control" name="subcategory" id="subcategory">
+                                        <option value="active">Select Subcategory</option>
+                                        @if($subCategories->isNotEmpty())
+                                            @foreach ($subCategories as $subcategory)
+                                                <option value="{{$subcategory->id}}">{{$subcategory->name}}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group input-group-static my-3">
+                                    <label for="brand">Brand</label>
+                                    <select class="form-control" name="brand" id="brand">
+                                        <option value="active">Select Brand</option>
+                                        @if($brands->isNotEmpty())
+                                            @foreach ($brands as $brand)
+                                                <option value="{{$brand->id}}">{{$brand->name}}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <h2 class="h5 mb-3">Pricing</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="input-group input-group-outline my-3">
+                                    <label for="price" class="form-label">Price</label>
+                                    <input type="text" class="form-control" id="price" name="price" value="{{isset($product['price']) ?  $product['price'] : ''}}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group input-group-outline my-3">
+                                    <label for="compare_price" class="form-label">Compare at Price</label>
+                                    <input type="text" class="form-control" id="compare_price" name="compare_price" value="{{isset($product['compare_price']) ?  $product['compare_price'] : ''}}">
+                                </div>
+                            </div>
+                        </div>
+                        <h2 class="h5 mb-3">Inventory</h2>
+                    </form>
+                </div>
+            <div class="card mx-auto shadow-sm border border-gray-300 p-4">
                 <h1 class="card-title h4 mb-4">{{$title}}</h1>
                 <form action="{{ $create ? route('products.store') : route('products.update',['product'=>$productId])}}" method="post" enctype="multipart/form-data">
                     @csrf
-                    <!-- Product Name and Description -->
-                    <div class="mb-3">
-                        <label for="name" class="form-label ">Name</label>
-                        <input type="text" id="name" name="name" value="{{isset($product['name']) ?  $product['name'] : ''}}" class="form-control border border-black" placeholder="Product Name">
-                    </div>
-                    <div class="mb-3">
-                        <label for="slug" class="form-label">Slug</label>
-                        <input type="text" id="slug" name="slug" value="{{isset($product['slug']) ?  $product['slug'] : ''}}" class="form-control border border-black" placeholder="Product Slug">
-                    </div>
+
+
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
                         <textarea id="description" name="description" rows="4" class="form-control border border-black">{{isset($product['description']) ?  $product['description'] : ''}}</textarea>
-                    </div>
-
-                    <!-- Product Category and Subcategory -->
-                    <div class="mb-3">
-                        <h2 class="h5 mb-3">Product Category</h2>
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label for="category" class="form-label ">Category</label>
-                                <select name="category" id="category" class="form-select">
-                                    <option value="active">Select Category</option>
-                                    @if($categories->isNotEmpty())
-                                    @foreach ($categories as $category)
-                                        <option value="{{$category->id}}">{{$category->name}}</option>
-                                    @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="subcategory" class="form-label">Subcategory</label>
-                                <select name="subcategory" id="subcategory" class="form-select">
-                                    <option value="active">Select Subcategory</option>
-                                    @if($subCategories->isNotEmpty())
-                                    @foreach ($subCategories as $subcategory)
-                                        <option value="{{$subcategory->id}}">{{$subcategory->name}}</option>
-                                    @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="brand" class="form-label">Brand</label>
-                                <select name="brand" id="brand" class="form-select">
-                                    <option value="active">Select Brand</option>
-                                    @if($brands->isNotEmpty())
-                                    @foreach ($brands as $brand)
-                                        <option value="{{$brand->id}}">{{$brand->name}}</option>
-                                    @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="mb-3">
@@ -93,24 +129,9 @@
                         @endif
                     </div>
 
-                    <!-- Pricing: Price and Compare at Price -->
-                    <div class="mb-3">
-                        <h2 class="h5 mb-3">Pricing</h2>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="price" class="form-label">Price</label>
-                                <input type="text" id="price" name="price" value="{{isset($product['price']) ?  $product['price'] : ''}}" class="form-control border border-black">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="compare_price" class="form-label">Compare at Price</label>
-                                <input type="text" id="compare_price" name="compare_price" value="{{isset($product['compare_price']) ?  $product['compare_price'] : ''}}" class="form-control border border-black">
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Inventory: SKU, Barcode, Track Quantity, Quantity -->
                     <div class="mb-3">
-                        <h2 class="h5 mb-3">Inventory</h2>
+
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="sku" class="form-label">SKU (Stock Keeping Unit)</label>
@@ -166,6 +187,7 @@
     @push('js')
     <script src="{{ asset('assets') }}/js/dropzone.min.js"></script>
     <script src="{{ asset('assets') }}/js/quill.min.js"></script>
+    <script src="{{ asset('assets') }}/js/quill.min.js"></script>
     <script>
         var quill = new Quill('#editor', {
             theme: 'snow' // Specify theme in configuration
@@ -173,39 +195,39 @@
     </script>
     @endpush
     <script>
-categorySelect.addEventListener('change', function () {
-    const categoryId = this.value;
-
-    // Clear existing options
-    subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
-    brandSelect.innerHTML = '<option value="">Select Brand</option>';
-
-    if (categoryId) {
-        fetch(`/categories/${categoryId}/subcategories`)
-            .then(response => response.json())
-            .then(data => {
-                data.subcategories.forEach(subcategory => {
-                    const option = document.createElement('option');
-                    option.value = subcategory.id;
-                    option.textContent = subcategory.name;
-                    subcategorySelect.appendChild(option);
-                });
-
-                // You need to send a separate request to fetch brands
-                fetch(`/categories/${categoryId}/brands`)
-                    .then(response => response.json())
-                    .then(data => {
-                        data.brands.forEach(brand => {
-                            const option = document.createElement('option');
-                            option.value = brand.id;
-                            option.textContent = brand.name;
-                            brandSelect.appendChild(option);
-                        });
-                    });
-            })
-            .catch(error => console.error('Fetch error:', error));
-    }
-});
+//     categorySelect.addEventListener('change', function () {
+//     const categoryId = this.value;
+//
+//     // Clear existing options
+//     subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+//     brandSelect.innerHTML = '<option value="">Select Brand</option>';
+//
+//     if (categoryId) {
+//         fetch(`/categories/${categoryId}/subcategories`)
+//             .then(response => response.json())
+//             .then(data => {
+//                 data.subcategories.forEach(subcategory => {
+//                     const option = document.createElement('option');
+//                     option.value = subcategory.id;
+//                     option.textContent = subcategory.name;
+//                     subcategorySelect.appendChild(option);
+//                 });
+//
+//                 // You need to send a separate request to fetch brands
+//                 fetch(`/categories/${categoryId}/brands`)
+//                     .then(response => response.json())
+//                     .then(data => {
+//                         data.brands.forEach(brand => {
+//                             const option = document.createElement('option');
+//                             option.value = brand.id;
+//                             option.textContent = brand.name;
+//                             brandSelect.appendChild(option);
+//                         });
+//                     });
+//             })
+//             .catch(error => console.error('Fetch error:', error));
+//     }
+// });
 </script>
 
 </x-layout>
